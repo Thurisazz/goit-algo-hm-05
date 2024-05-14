@@ -2,6 +2,8 @@ def input_error(func):
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        except KeyError:
+            return "Name not found, please give a correct name"
         except ValueError:
             return "Give me name and phone please."
         except IndexError:
@@ -31,10 +33,7 @@ def change_contact(args, contacts):
 @input_error
 def show_phone(args, contacts):
     name = args[0]
-    if name not in contacts:
-        return "Name not found"
-    else: 
-        return contacts[name]
+    return contacts[name]
     
 
 def show_all(contacts):
@@ -47,6 +46,10 @@ def main():
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ")
+        if not user_input.strip():
+            print("Please enter a valid command")
+            continue
+
         command, *args = parse_input(user_input)
 
         if command in ["close", "exit"]:
